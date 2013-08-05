@@ -24,6 +24,7 @@ from json import JSONEncoder
 from django.utils import simplejson
 import socket
 import threading
+import commands
 
 IMAGE_FILE_PATH = "/tmp/image.jpg"
 
@@ -93,7 +94,7 @@ def start_streaming (args_list):
 		res["code"] = 200
 		res["streaming_url"] = VLC_STREAMING_URL % (get_ip())
 		
-	except:
+	except:		
 		res["code"] = 500
 		res["msg"] = "Error while streaming was initialized!"
 		res["streaming_url"] = ""
@@ -117,8 +118,8 @@ def stop_streaming():
 
 
 def get_ip ():
-	s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-	s.connect(("gmail.com",80))
-	ip = (s.getsockname()[0])
-	s.close()
-	return ip
+	intf = 'wlan0'
+	intf_ip = commands.getoutput("ip address show dev " + intf).split()
+	intf_ip = intf_ip[intf_ip.index('inet') + 1].split('/')[0]
+
+	return intf_ip
