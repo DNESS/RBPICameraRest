@@ -52,7 +52,8 @@ def video_streaming (request):
 	if request.method == 'POST':
 		json_data = simplejson.loads(request.raw_post_data)
 
-		url_streaming = start_streaming(json_data)
+		ip = request.META['HTTP_HOST'].split(":")[0]
+		url_streaming = start_streaming(json_data, ip)
 
 		return HttpResponse(simplejson.dumps(url_streaming), JSON_MIMETYPE)
 

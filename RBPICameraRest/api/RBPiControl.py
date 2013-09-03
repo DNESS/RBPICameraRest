@@ -75,7 +75,7 @@ def snap_photo (args_list):
 def launch_cmd (command):
 	code = call (command, shell=True)
 
-def start_streaming (args_list):
+def start_streaming (args_list, ip):
 
 	global control_streaming_th 
 	res = {}
@@ -92,7 +92,7 @@ def start_streaming (args_list):
 			streaming_th.start()
 
 		res["code"] = 200
-		res["streaming_url"] = VLC_STREAMING_URL % (get_ip())
+		res["streaming_url"] = VLC_STREAMING_URL % (ip)
 		
 	except:		
 		res["code"] = 500
@@ -118,7 +118,7 @@ def stop_streaming():
 
 
 def get_ip ():
-	intf = 'wlan0'
+	intf = 'eth0'
 	intf_ip = commands.getoutput("ip address show dev " + intf).split()
 	intf_ip = intf_ip[intf_ip.index('inet') + 1].split('/')[0]
 
