@@ -25,9 +25,10 @@ from django.utils import simplejson
 import socket
 import threading
 import commands
+from time import gmtime, strftime
 
 IMAGE_FILE_PATH = "/tmp/image.jpg"
-
+IMAGE_DATETIME_FILE_PATH = "/tmp/image-datetime.jpg"
 RBPI_PHOTO_COMMAND = "raspistill"
 RBPI_VIDEO_COMMAND = "raspivid"
 
@@ -66,8 +67,12 @@ def snap_photo (args_list):
 	command = RBPI_PHOTO_COMMAND + " " + args
 
 	return_code = call(command, shell=True);
+
 	if (return_code == 0):
-		return IMAGE_FILE_PATH
+		datetime = strftime("%Y-%m-%d %H:%M:%S", gmtime())
+		command = "convert " + IMAGE_FILE_PATH + " -pointsize 12 -fill black -undercolor white -annotate +10+20 '" + datetime + "' " + IMAGE_DATETIME_FILE_PATH
+		call(command, shell=True); 		
+		return IMAGE_DATETIME_FILE_PATH
 	else:
 		return None
 
