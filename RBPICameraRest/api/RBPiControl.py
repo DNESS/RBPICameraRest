@@ -25,7 +25,8 @@ from django.utils import simplejson
 import socket
 import threading
 import commands
-from time import gmtime, strftime
+import time
+from time import strftime
 
 IMAGE_FILE_PATH = "/tmp/image.jpg"
 IMAGE_DATETIME_FILE_PATH = "/tmp/image-datetime.jpg"
@@ -69,7 +70,7 @@ def snap_photo (args_list):
 	return_code = call(command, shell=True);
 
 	if (return_code == 0):
-		datetime = strftime("%Y-%m-%d %H:%M:%S", gmtime())
+		datetime = strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 		command = "convert " + IMAGE_FILE_PATH + " -pointsize 12 -fill black -undercolor white -annotate +10+20 '" + datetime + "' " + IMAGE_DATETIME_FILE_PATH
 		call(command, shell=True); 		
 		return IMAGE_DATETIME_FILE_PATH
