@@ -89,6 +89,8 @@ def photo_shot (request):
 		response = HttpResponse(FileWrapper(image_file), content_type='image/jpeg')
 		response['Content-Disposition'] = 'attachment; filename=image.jpg'
 
+		os.remove(image_path)
+
 		return response
 
 	else:

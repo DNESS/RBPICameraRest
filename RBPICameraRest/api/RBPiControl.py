@@ -27,6 +27,7 @@ import threading
 import commands
 import time
 from time import strftime
+import os
 
 IMAGE_FILE_PATH = "/tmp/image.jpg"
 IMAGE_DATETIME_FILE_PATH = "/tmp/image-datetime.jpg"
@@ -67,14 +68,13 @@ def snap_photo (args_list):
 
 	command = RBPI_PHOTO_COMMAND + " " + args
 
-	print command
-
 	return_code = call(command, shell=True);
 
 	if (return_code == 0):
 		datetime = strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 		command = "convert " + IMAGE_FILE_PATH + " -pointsize 12 -fill black -undercolor white -annotate +10+20 '" + datetime + "' " + IMAGE_DATETIME_FILE_PATH
-		call(command, shell=True); 		
+		call(command, shell=True);
+		os.remove(IMAGE_FILE_PATH)	
 		return IMAGE_DATETIME_FILE_PATH
 	else:
 		return None
