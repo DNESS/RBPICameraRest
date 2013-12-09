@@ -63,9 +63,11 @@ def parse_args (args_list, timeout = 0):
 
 def snap_photo (args_list):
 
-	args = "--output " + IMAGE_FILE_PATH + " "  + parse_args(args_list)
+	args = "--output " + IMAGE_FILE_PATH + " "  + parse_args(args_list, 300)
 
 	command = RBPI_PHOTO_COMMAND + " " + args
+
+	print command
 
 	return_code = call(command, shell=True);
 
