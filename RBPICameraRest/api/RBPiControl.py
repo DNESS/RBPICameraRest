@@ -85,7 +85,6 @@ def launch_cmd (command):
 
 def start_streaming (args_list, ip):
 
-	global control_streaming_th 
 	res = {}
 	args = " -o - " + parse_args(args_list, 9999999)
 	command = RBPI_VIDEO_COMMAND + " " + args + " " + VLC_STREAMING_COMMAND
@@ -93,8 +92,9 @@ def start_streaming (args_list, ip):
 	print command 
 
 	try:
-		if (control_streaming_th == None):
-			control_streaming_th = 1
+		command_vlc = "ps aux | grep -v grep | grep cvlc"
+		ret = call (command_vlc, shell=True)
+		if (ret != 0):
 			streaming_th  = threading.Thread(target = launch_cmd, args=[command])
 			streaming_th.setDaemon(True)
 			streaming_th.start()
@@ -102,7 +102,7 @@ def start_streaming (args_list, ip):
 		res["code"] = 200
 		res["streaming_url"] = VLC_STREAMING_URL % (ip)
 		
-	except:		
+	except:	
 		res["code"] = 500
 		res["msg"] = "Error while streaming was initialized!"
 		res["streaming_url"] = ""
@@ -112,7 +112,6 @@ def start_streaming (args_list, ip):
 
 def stop_streaming():
 
-	global control_streaming_th 
 
 	cmds = {'vlc',RBPI_VIDEO_COMMAND}
 
@@ -121,7 +120,6 @@ def stop_streaming():
 		kill_command = "ps aux | grep " + cmd + " | grep -v grep | tr -s ' ' | cut -d' ' -f2 | tr -s '\n' ' ' | sed -e s/^/kill\ -9\ /g | bash"
 		call (kill_command, shell=True)
 
-	control_streaming_th = None
 
 
 
